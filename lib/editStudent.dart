@@ -1,5 +1,3 @@
-
-
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -12,15 +10,25 @@ import 'package:sample_student_record/db/model/data_model.dart';
 // ignore_for_file: prefer_const_constructors
 
 class edit_student extends StatefulWidget {
-  edit_student({Key? key,required this.editName,required this.editAge,required this.editBatch,required this.editYear,required this.id,required this.index, required this.editProfile}) : super(key: key);
+  edit_student(
+      {Key? key,
+      required this.editName,
+      required this.editAge,
+      required this.editBatch,
+      required this.editYear,
+      required this.id,
+      required this.index,
+      required this.editProfile,
+      required this.listKey})
+      : super(key: key);
   var editName;
   var editAge;
   var editBatch;
   var editYear;
   var id;
   var index;
+  var listKey;
   String editProfile;
-
 
   @override
   State<edit_student> createState() => _edit_studentState();
@@ -28,19 +36,33 @@ class edit_student extends StatefulWidget {
 
 class _edit_studentState extends State<edit_student> {
   // controller
-  final _nameController = TextEditingController();
+  //final _nameController = TextEditingController();
 
-  final _ageController = TextEditingController();
+  //final _ageController = TextEditingController();
 
-  final _batchController = TextEditingController();
+  //final _batchController = TextEditingController();
 
-  final _yearController = TextEditingController();
-  
+  //final _yearController = TextEditingController();
+  TextEditingController? _nameController;
+  TextEditingController? _ageController;
+  TextEditingController? _batchController;
+  TextEditingController? _yearController;
 
-  File? _ImageFile;
+  String? _ImageFile;
+
   // File file = File(_ImageFile.path)
-
+  String? updatedImage;
   final ImagePicker picker = ImagePicker();
+
+  @override
+  void initState() {
+    _nameController = TextEditingController(text: widget.editName);
+    _ageController = TextEditingController(text: widget.editAge);
+    _batchController = TextEditingController(text: widget.editBatch);
+    _yearController = TextEditingController(text: widget.editYear);
+
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -76,29 +98,98 @@ class _edit_studentState extends State<edit_student> {
                   SizedBox(
                     height: 30,
                   ),
-                  imageProfieGet(context,widget.editProfile),
+                  imageProfieGet(context, widget.editProfile),
+
                   SizedBox(
                     height: 20,
                   ),
-                  textformFieldFunction(
-                      _nameController, widget.editName, TextInputType.name),
-                  SizedBox(
-                    height: 20,
+                  // textformFieldFunction(
+                  //     _nameController,TextInputType.name),
+                  // SizedBox(
+                  //   height: 20,
+                  // ),
+                  // textformFieldFunction(
+                  //     _ageController,TextInputType.number),
+                  // SizedBox(
+                  //   height: 20,
+                  // ),
+                  // textformFieldFunction(
+                  //     _batchController,TextInputType.name),
+                  // SizedBox(
+                  //   height: 20,
+                  // ),
+                  // textformFieldFunction(
+                  //     _yearController,TextInputType.number),
+                  TextFormField(
+                    keyboardType: TextInputType.name,
+                    controller: _nameController,
+                    decoration: InputDecoration(
+                      fillColor: Colors.white,
+                      filled: true,
+                      hintText: 'Name',
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(20),
+                      
+                      ),
+                      prefix: Text('NAME:')
+                    ),
                   ),
-                  textformFieldFunction(
-                      _ageController, widget.editAge, TextInputType.number),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  textformFieldFunction(
-                      _batchController, widget.editBatch, TextInputType.name),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  textformFieldFunction(
-                      _yearController, widget.editYear, TextInputType.number),
+
                   SizedBox(
                     height: 30,
+                  ),
+                  TextFormField(
+                    keyboardType: TextInputType.number,
+                    controller: _ageController,
+                    decoration: InputDecoration(
+                      fillColor: Colors.white,
+                      filled: true,
+                      hintText: 'Age',
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      prefix: Text('AGE:')
+                    ),
+                    validator: (value) {
+                      if(value!.isEmpty){
+                        return 'Please Enter Age';
+                      }
+                       if (!RegExp(r'^[0-9]+$').hasMatch(value)) {
+                                return 'Please enter a valid Age';
+                              }
+                    },
+                  ),
+                  SizedBox(
+                    height: 30,
+                  ),
+                  TextFormField(
+                    keyboardType: TextInputType.name,
+                    controller: _batchController,
+                    decoration: InputDecoration(
+                      fillColor: Colors.white,
+                      filled: true,
+                      hintText: 'Batch',
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      prefix: Text('BATCH:')
+                    ),
+                  ),
+                  SizedBox(
+                    height: 30,
+                  ),
+                  TextFormField(
+                    keyboardType: TextInputType.number,
+                    controller: _yearController,
+                    decoration: InputDecoration(
+                      fillColor: Colors.white,
+                      filled: true,
+                      hintText: 'Year',
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      prefix: Text('YEAR:')
+                    ),
                   ),
                   ElevatedButton.icon(
                     onPressed: () {
@@ -117,75 +208,81 @@ class _edit_studentState extends State<edit_student> {
   }
 
   Future<void> onEditStudentButtonClick() async {
-    final box=Boxes.getAll();
-    List<StudentModel>gg=box.values.toList() as List<StudentModel>;
-    final data =gg[widget.index];
-    
+    final box = Boxes.getAll();
+    List<StudentModel> gg = box.values.toList() as List<StudentModel>;
+    final data = gg[widget.index];
 
-    var _name= data.name;
-    var _age= data.age;
-    var _batch=data.batch;
-    var _year=data.year;
+    var _name = _nameController!.text;
+    var _age = _ageController!.text;
+    var _batch = _batchController!.text;
+    var _year = _yearController!.text;
+
     String _profile =data.profile_image;
 
     print(data.batch);
 
-    if(_name==_nameController.text){
-       
-       _name = data.name;
+    if (_name != null) {
+     // _name = data.name;
+    } else {
+      _name = _nameController!.text;
     }
-    else{
-      _name = _nameController.text;
-     
+    if (_ageController != null) {
+     // _age = data.age;
+    } else {
+      _age = _ageController!.text;
     }
-    if(_ageController!=null){
-        _age = _ageController.text;
-        
+    if (_batchController != null) {
+      //_batch = data.batch;
+    } else {
+      _batch = _batchController!.text;
     }
-    else{
-       _age = data.age;
+    if (_yearController != null) {
+     // _year = data.year;
+    } else {
+      _year = _yearController!.text;
     }
-        if(_batchController!=data.batch){
-          
-       _batch = _batchController.text;
-      
-    }
-    else{
-      _batch = data.batch;
-    }
-        if(_yearController!=null){
-           _year = _yearController.text;
-    
-    }
-    else{
-       _year = data.year;
-      
+    if (updatedImage != null) {
+      return;
+    } else {
+      updatedImage =widget.editProfile;
     }
 
-  
     // print('$_name,$_age,$_batch,$_year');
-    final _student = StudentModel(name: _name, age: _age, batch: _batch, year: _year, profile_image: _profile);
-    EditStudent(_student,widget.id);
-     print("${data.name}>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
-     print("${_nameController.text}>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
-     data.save();
-     
+    
+    final _student = StudentModel(
+        name: _name,
+        age: _age,
+        batch: _batch,
+        year: _year,
+        profile_image: updatedImage!);
+        // final studentDB = await Hive.openBox<StudentModel>('Student_db');
+        // await studentDB.put(_student,widget.id);
+    EditStudent(_student, widget.id);
+    print("${data.name}>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+    print(
+        "${_nameController!.text}>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+        print(
+        "${_ageController!.text}>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+        print(
+        "${_batchController!.text}>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+        print(updatedImage);
+        print(widget.editProfile);
+    //data.save();
+
     Navigator.pop(context);
   }
 
   //Function for Text Form Field
   Widget textformFieldFunction(
-      
-      TextEditingController controller, String labelText, TextInputType type) {
+      TextEditingController controller, TextInputType type) {
     return TextFormField(
-      controller: TextEditingController(text: labelText),
+      controller: TextEditingController(text: controller.text),
       keyboardType: type,
       decoration: InputDecoration(
-        
         fillColor: Colors.white,
         filled: true,
-       // hintText: labelText,
-       
+        // hintText: labelText,
+
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(20),
         ),
@@ -199,12 +296,15 @@ class _edit_studentState extends State<edit_student> {
       children: [
         CircleAvatar(
           radius: 70,
-           backgroundImage: 
-             FileImage(File(image),)
-            
-              //AssetImage('assets/images/user_icon.png'),
-              
-              
+          backgroundImage: FileImage(File(image))
+          // (_ImageFile != null)
+          //     ? AssetImage('assets/images/user_icon.png')
+          //     : AssetImage('assets/images/user_icon.png'),
+          //  FileImage(File(_ImageFile!)) as ImageProvider
+          // FileImage(
+          //     File(updatedImage!),
+          //   )
+          //AssetImage('assets/images/user_icon.png'),
         ),
         Positioned(
           bottom: 20,
@@ -270,13 +370,14 @@ class _edit_studentState extends State<edit_student> {
   }
 
   void takePhoto(ImageSource source) async {
-  final getimage = await picker.pickImage(
+    final getimage = await picker.pickImage(
       source: source,
       //preferredCameraDevice: CameraDevice.front,
     );
     setState(() {
-      _ImageFile =File( getimage!.path);
+      updatedImage = getimage!.path;
     });
-   // _ImageFile = getimage;
+    // _ImageFile = getimage;
   }
+  
 }

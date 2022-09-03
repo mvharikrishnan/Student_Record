@@ -5,11 +5,12 @@ import 'package:flutter/material.dart';
 import 'package:sample_student_record/db/functions/db_functions.dart';
 import 'package:sample_student_record/db/model/data_model.dart';
 import 'package:sample_student_record/editStudent.dart';
+import 'package:sample_student_record/searchuser.dart';
 import 'package:sample_student_record/studentProfile.dart';
 
 class View_studens extends StatelessWidget {
   const View_studens({Key? key}) : super(key: key);
- 
+
   @override
   Widget build(BuildContext context) {
     getAllStudents();
@@ -36,7 +37,9 @@ class View_studens extends StatelessWidget {
                           ),
                         ),
                       ),
-                      leading: CircleAvatar(backgroundImage: FileImage(File(data.profile_image)),),
+                      leading: CircleAvatar(
+                        backgroundImage: FileImage(File(data.profile_image)),
+                      ),
                       title: Text(data.name),
                       subtitle: Text('Batch: ${data.batch}'),
                       trailing: Row(
@@ -46,10 +49,17 @@ class View_studens extends StatelessWidget {
                             onPressed: () {
                               Navigator.of(context).push(
                                 MaterialPageRoute(
-                                  builder: (ctx) => edit_student(editName: data.name, editAge: data.age, editBatch: data.batch, editYear: data.year, id: data.key,index:index, editProfile: data.profile_image,),
+                                  builder: (ctx) => edit_student(
+                                      editName: data.name,
+                                      editAge: data.age,
+                                      editBatch: data.batch,
+                                      editYear: data.year,
+                                      id: data.key,
+                                      index: index,
+                                      editProfile: data.profile_image,
+                                      listKey: data.key),
                                 ),
                               );
-                              
                             },
                             icon: Icon(
                               Icons.edit,
@@ -101,6 +111,15 @@ class View_studens extends StatelessWidget {
           );
         },
         valueListenable: studentListNotifier,
+      ),
+      floatingActionButton: FloatingActionButton(onPressed: () {
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) => Search_Screen(),
+          ),
+        );
+      },
+      child: const Icon(Icons.search),
       ),
     );
   }

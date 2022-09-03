@@ -11,7 +11,7 @@ Future<void> main()async{
  await Hive.initFlutter();
  if(!Hive.isAdapterRegistered(StudentModelAdapter().typeId)){
   Hive.registerAdapter(StudentModelAdapter());
-  // await Hive.openBox<StudentModel>('Student_db');
+   await Hive.openBox<StudentModel>('Student_db');
  }
   runApp(const MyApp());
 }
