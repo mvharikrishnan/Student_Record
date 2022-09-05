@@ -35,6 +35,7 @@ class edit_student extends StatefulWidget {
 }
 
 class _edit_studentState extends State<edit_student> {
+   final _formkey = GlobalKey<FormState>();
   // controller
   //final _nameController = TextEditingController();
 
@@ -68,6 +69,7 @@ class _edit_studentState extends State<edit_student> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        
         backgroundColor: Colors.black,
       ),
       body: ListView(
@@ -84,121 +86,150 @@ class _edit_studentState extends State<edit_student> {
             height: MediaQuery.of(context).size.height * 0.901,
             child: Padding(
               padding: const EdgeInsets.all(20.0),
-              child: Column(
-                children: [
-                  Center(
-                    child: Text(
-                      'EDIT STUDENTS',
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 25,
-                          fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 30,
-                  ),
-                  imageProfieGet(context, widget.editProfile),
-
-                  SizedBox(
-                    height: 20,
-                  ),
-                  // textformFieldFunction(
-                  //     _nameController,TextInputType.name),
-                  // SizedBox(
-                  //   height: 20,
-                  // ),
-                  // textformFieldFunction(
-                  //     _ageController,TextInputType.number),
-                  // SizedBox(
-                  //   height: 20,
-                  // ),
-                  // textformFieldFunction(
-                  //     _batchController,TextInputType.name),
-                  // SizedBox(
-                  //   height: 20,
-                  // ),
-                  // textformFieldFunction(
-                  //     _yearController,TextInputType.number),
-                  TextFormField(
-                    keyboardType: TextInputType.name,
-                    controller: _nameController,
-                    decoration: InputDecoration(
-                      fillColor: Colors.white,
-                      filled: true,
-                      hintText: 'Name',
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(20),
-                      
+              child: Form(
+                key: _formkey,
+                child: Column(
+                  children: [
+                    Center(
+                      child: Text(
+                        'EDIT STUDENTS',
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 25,
+                            fontWeight: FontWeight.bold),
                       ),
-                      prefix: Text('NAME:')
                     ),
-                  ),
-
-                  SizedBox(
-                    height: 30,
-                  ),
-                  TextFormField(
-                    keyboardType: TextInputType.number,
-                    controller: _ageController,
-                    decoration: InputDecoration(
-                      fillColor: Colors.white,
-                      filled: true,
-                      hintText: 'Age',
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(20),
+                    SizedBox(
+                      height: 30,
+                    ),
+                    imageProfieGet(context, widget.editProfile),
+              
+                    SizedBox(
+                      height: 20,
+                    ),
+                    // textformFieldFunction(
+                    //     _nameController,TextInputType.name),
+                    // SizedBox(
+                    //   height: 20,
+                    // ),
+                    // textformFieldFunction(
+                    //     _ageController,TextInputType.number),
+                    // SizedBox(
+                    //   height: 20,
+                    // ),
+                    // textformFieldFunction(
+                    //     _batchController,TextInputType.name),
+                    // SizedBox(
+                    //   height: 20,
+                    // ),
+                    // textformFieldFunction(
+                    //     _yearController,TextInputType.number),
+                    TextFormField(
+                      keyboardType: TextInputType.name,
+                      controller: _nameController,
+                      decoration: InputDecoration(
+                        fillColor: Colors.white,
+                        filled: true,
+                        hintText: 'Name',
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(20),
+                        
+                        ),
+                        prefix: Text('NAME:')
                       ),
-                      prefix: Text('AGE:')
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                            return 'Please enter your Name';
+                          }
+                          
+                          return null;
+                      },
                     ),
-                    validator: (value) {
-                      if(value!.isEmpty){
-                        return 'Please Enter Age';
-                      }
-                       if (!RegExp(r'^[0-9]+$').hasMatch(value)) {
-                                return 'Please enter a valid Age';
-                              }
-                    },
-                  ),
-                  SizedBox(
-                    height: 30,
-                  ),
-                  TextFormField(
-                    keyboardType: TextInputType.name,
-                    controller: _batchController,
-                    decoration: InputDecoration(
-                      fillColor: Colors.white,
-                      filled: true,
-                      hintText: 'Batch',
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(20),
+              
+                    SizedBox(
+                      height: 30,
+                    ),
+                    TextFormField(
+                      keyboardType: TextInputType.number,
+                      controller: _ageController,
+                      decoration: InputDecoration(
+                        fillColor: Colors.white,
+                        filled: true,
+                        hintText: 'Age',
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        prefix: Text('AGE:')
                       ),
-                      prefix: Text('BATCH:')
+                      validator: (value) {
+                         if (value!.isEmpty) {
+                            return 'Please enter your age';
+                          }
+                          if (!RegExp(r'^[0-9]+$').hasMatch(value)) {
+                            return 'Please enter a valid Age';
+                          }
+                          return null;
+                      },
                     ),
-                  ),
-                  SizedBox(
-                    height: 30,
-                  ),
-                  TextFormField(
-                    keyboardType: TextInputType.number,
-                    controller: _yearController,
-                    decoration: InputDecoration(
-                      fillColor: Colors.white,
-                      filled: true,
-                      hintText: 'Year',
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(20),
+                    SizedBox(
+                      height: 30,
+                    ),
+                    TextFormField(
+                      keyboardType: TextInputType.name,
+                      controller: _batchController,
+                      decoration: InputDecoration(
+                        fillColor: Colors.white,
+                        filled: true,
+                        hintText: 'Batch',
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        prefix: Text('BATCH:')
                       ),
-                      prefix: Text('YEAR:')
+                      validator: (value) {
+                         if (value == null || value.isEmpty) {
+                            return 'Please enter your Batch';
+                          }
+                    
+                          return null;
+                      },
                     ),
-                  ),
-                  ElevatedButton.icon(
-                    onPressed: () {
-                      onEditStudentButtonClick();
-                    },
-                    icon: Icon(Icons.person_add_alt_1_sharp),
-                    label: Text('SAVE CHANGES'),
-                  ),
-                ],
+                    SizedBox(
+                      height: 30,
+                    ),
+                    TextFormField(
+                      keyboardType: TextInputType.number,
+                      controller: _yearController,
+                      decoration: InputDecoration(
+                        fillColor: Colors.white,
+                        filled: true,
+                        hintText: 'Year',
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        prefix: Text('YEAR:')
+                      ),
+                      validator: (value) {
+                         if (value == null || value.isEmpty) {
+                            return 'Please enter your year';
+                          }
+                          if (!RegExp(r'^[0-3]+$').hasMatch(value)) {
+                            return 'Please enter a valid Year';
+                          }
+                          return null;
+                      },
+                    ),
+                    ElevatedButton.icon(
+                      onPressed: () {
+                        if (_formkey.currentState!.validate()) {
+                          onEditStudentButtonClick();
+                        }
+                      },
+                      icon: Icon(Icons.person_add_alt_1_sharp),
+                      label: Text('SAVE CHANGES'),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
@@ -219,7 +250,7 @@ class _edit_studentState extends State<edit_student> {
 
     String _profile =data.profile_image;
 
-    print(data.batch);
+    //print(data.batch);
 
     if (_name != null) {
      // _name = data.name;
@@ -255,27 +286,18 @@ class _edit_studentState extends State<edit_student> {
         batch: _batch,
         year: _year,
         profile_image: updatedImage!);
-        // final studentDB = await Hive.openBox<StudentModel>('Student_db');
-        // await studentDB.put(_student,widget.id);
+        
     EditStudent(_student, widget.id);
-    print("${data.name}>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
-    print(
-        "${_nameController!.text}>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
-        print(
-        "${_ageController!.text}>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
-        print(
-        "${_batchController!.text}>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
-        print(updatedImage);
-        print(widget.editProfile);
-    //data.save();
-
+    
+    EditSnackBAr(context);
     Navigator.pop(context);
   }
 
   //Function for Text Form Field
   Widget textformFieldFunction(
-      TextEditingController controller, TextInputType type) {
+      TextEditingController controller, TextInputType type ) {
     return TextFormField(
+      
       controller: TextEditingController(text: controller.text),
       keyboardType: type,
       decoration: InputDecoration(
@@ -297,14 +319,7 @@ class _edit_studentState extends State<edit_student> {
         CircleAvatar(
           radius: 70,
           backgroundImage: FileImage(File(image))
-          // (_ImageFile != null)
-          //     ? AssetImage('assets/images/user_icon.png')
-          //     : AssetImage('assets/images/user_icon.png'),
-          //  FileImage(File(_ImageFile!)) as ImageProvider
-          // FileImage(
-          //     File(updatedImage!),
-          //   )
-          //AssetImage('assets/images/user_icon.png'),
+         
         ),
         Positioned(
           bottom: 20,
@@ -379,5 +394,18 @@ class _edit_studentState extends State<edit_student> {
     });
     // _ImageFile = getimage;
   }
+
+  EditSnackBAr(BuildContext context) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          'Sucessfully Edited Record',
+        ),
+        backgroundColor: Colors.blue,
+      ),
+    );
+  }
+
+ 
   
 }

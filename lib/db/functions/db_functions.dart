@@ -14,6 +14,7 @@ final studentDB = await Hive.openBox<StudentModel>('Student_db');
   value.id = _id; 
   studentListNotifier.value.add(value);
   studentListNotifier.notifyListeners();
+  
   // print(value.toString());
 }
 void EditStudent(StudentModel value,var id )async{

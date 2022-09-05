@@ -15,6 +15,7 @@ class Add_student extends StatefulWidget {
 }
 
 class _Add_studentState extends State<Add_student> {
+  final _formkey = GlobalKey<FormState>();
   // controller
   final _nameController = TextEditingController();
 
@@ -36,70 +37,129 @@ class _Add_studentState extends State<Add_student> {
       appBar: AppBar(
         backgroundColor: Colors.black,
       ),
-      body: ListView(
-        children: [
-          Container(
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                  image: AssetImage(
-                    'assets/images/background.jpg',
-                  ),
-                  fit: BoxFit.cover),
-            ),
-            // width: double.infinity,
-            height: MediaQuery.of(context).size.height * 0.901,
-            child: Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: Column(
-                children: [
-                  Center(
-                    child: Text(
-                      'ADD STUDENTS',
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 25,
-                          fontWeight: FontWeight.bold),
+      body: Form(
+        key: _formkey,
+        child: ListView(
+          children: [
+            Container(
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                    image: AssetImage(
+                      'assets/images/background.jpg',
                     ),
-                  ),
-                  SizedBox(
-                    height: 30,
-                  ),
-                  imageProfieGet(context),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  textformFieldFunction(
-                      _nameController, 'Name', TextInputType.name),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  textformFieldFunction(
-                      _ageController, 'Age', TextInputType.number),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  textformFieldFunction(
-                      _batchController, 'Batch', TextInputType.name),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  textformFieldFunction(
-                      _yearController, 'Year', TextInputType.number),
-                  SizedBox(
-                    height: 30,
-                  ),
-                  ElevatedButton.icon(
-                    onPressed: () {
-                      onAddStudentButtonClick();
-                    },
-                    icon: Icon(Icons.person_add_alt_1_sharp),
-                    label: Text('ADD'),
-                  ),
-                ],
+                    fit: BoxFit.cover),
+              ),
+              // width: double.infinity,
+              height: MediaQuery.of(context).size.height * 0.901,
+              child: Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Column(
+                  children: [
+                    Center(
+                      child: Text(
+                        'ADD STUDENTS',
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 25,
+                            fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 30,
+                    ),
+                    imageProfieGet(context),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    textformFieldFunction(
+                      _nameController,
+                      'Name',
+                      TextInputType.name,
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return 'Please enter your Name';
+                        }
+                        // if (!RegExp(
+                        //         r"^\s*([A-Za-z]{1,}([\.,] |[-']| ))+[A-Za-z]+\.?\s*$")
+                        //     .hasMatch(value)) {
+                        //   return 'Please enter a valid Name';
+                        // }
+                        return null;
+                      },
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    textformFieldFunction(
+                      _ageController,
+                      'Age',
+                      TextInputType.number,
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return 'Please enter your age';
+                        }
+                        if (!RegExp(r'^[0-9]+$').hasMatch(value)) {
+                          return 'Please enter a valid Age';
+                        }
+                        return null;
+                      },
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    textformFieldFunction(
+                      _batchController,
+                      'Batch',
+                      TextInputType.name,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter your Batch';
+                        }
+                        // if (!RegExp(
+                        //         r"^\s*([A-Za-z]{1,}([\.,] |[-']| ))+[A-Za-z]+\.?\s*$")
+                        //     .hasMatch(value)) {
+                        //   return 'Please enter a valid Batch';
+                        // }
+                        return null;
+                      },
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    textformFieldFunction(
+                      _yearController,
+                      'Year',
+                      TextInputType.number,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter your year';
+                        }
+                        if (!RegExp(r'^[0-3]+$').hasMatch(value)) {
+                          return 'Please enter a valid Year';
+                        }
+                        return null;
+                      },
+                    ),
+                    SizedBox(
+                      height: 30,
+                    ),
+                    ElevatedButton.icon(
+                      onPressed: () {
+                        if (_formkey.currentState!.validate()) {
+                          onAddStudentButtonClick();
+                          // Scaffold.of(context).showSnackBar(SnackBar(content: Text('Sucessfully Added Record',),backgroundColor: Colors.blue,));
+                          //ShowAddAlertBox();
+                        }
+                      },
+                      icon: Icon(Icons.person_add_alt_1_sharp),
+                      label: Text('ADD'),
+                    ),
+                  ],
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -109,29 +169,31 @@ class _Add_studentState extends State<Add_student> {
     final _age = _ageController.text.trim();
     final _batch = _batchController.text.trim();
     final _year = _yearController.text.trim();
-   
-    if (_name.isEmpty ||
-        _age.isEmpty ||
-        _batch.isEmpty ||
-        _year.isEmpty
-        ) {
-      return;
+
+    if (_name.isEmpty || _age.isEmpty || _batch.isEmpty || _year.isEmpty) {
+      return print('The Forms is empty');
     }
-   //print('$_name,$_age,$_batch,$_year,$_profile');
+    //print('$_name,$_age,$_batch,$_year,$_profile');
     final _student = StudentModel(
-        name: _name,
-        age: _age,
-        batch: _batch,
-        year: _year,
-        profile_image: _ImageFile!,
-        );
+      name: _name,
+      age: _age,
+      batch: _batch,
+      year: _year,
+      profile_image: _ImageFile!,
+    );
     addStudent(_student);
+    //Navigator.pop(context);
+    AddSnackBAr(context);
+    clearText();
+
   }
 
   //Function for Text Form Field
   Widget textformFieldFunction(
-      TextEditingController controller, String labelText, TextInputType type) {
+      TextEditingController controller, String labelText, TextInputType type,
+      {required String? Function(dynamic value) validator}) {
     return TextFormField(
+      validator: validator,
       controller: controller,
       keyboardType: type,
       decoration: InputDecoration(
@@ -227,5 +289,27 @@ class _Add_studentState extends State<Add_student> {
       _ImageFile = getimage!.path;
     });
     // _ImageFile = getimage;
+  }
+
+  // For Clearing Datas in the text form Field
+  clearText() {
+    _nameController.clear();
+    _ageController.clear();
+    _yearController.clear();
+    _batchController.clear();
+    setState(() {
+      _ImageFile = null;
+    });
+  }
+
+  AddSnackBAr(BuildContext context) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          'Sucessfully Added Record',
+        ),
+        backgroundColor: Colors.blue,
+      ),
+    );
   }
 }

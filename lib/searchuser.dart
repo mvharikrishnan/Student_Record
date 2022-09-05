@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:sample_student_record/db/model/data_model.dart';
+import 'package:sample_student_record/studentProfile.dart';
 
 class Search_Screen extends StatefulWidget {
   const Search_Screen({Key? key}) : super(key: key);
@@ -66,9 +67,11 @@ class _Search_ScreenState extends State<Search_Screen> {
             Expanded(
               child: (displayStudent.length != 0)
                   ? ListView.separated(
+                    
                       itemBuilder: (context, index) {
+                         final data = displayStudent[index];
                         File imageFile =
-                            File(studentBoxList[index].profile_image);
+                            File(displayStudent[index].profile_image);
 
                         return Card(
                           color: Colors.white,
@@ -81,7 +84,15 @@ class _Search_ScreenState extends State<Search_Screen> {
                               displayStudent[index].name,
                               style: TextStyle(color: Colors.black),
                             ),
-                            subtitle: Text(displayStudent[index].batch),
+                            subtitle: Text(displayStudent[index].age),
+                            trailing: Text('BATCH: ${displayStudent[index].batch}'),
+                            onTap: () => Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (ctx) => StudentProfile_view(
+                            dataListScren: data,
+                          ),
+                        ),
+                      ),
                           ),
                         );
                       },

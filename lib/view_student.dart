@@ -15,8 +15,10 @@ class View_studens extends StatelessWidget {
   Widget build(BuildContext context) {
     getAllStudents();
     return Scaffold(
+      
       backgroundColor: Colors.blueGrey[900],
       appBar: AppBar(
+        title: Text('View Student'),
         backgroundColor: Colors.black,
       ),
       body: ValueListenableBuilder(
@@ -24,7 +26,7 @@ class View_studens extends StatelessWidget {
             (BuildContext ctx, List<StudentModel> StudentModel, Widget? child) {
           return Padding(
             padding: const EdgeInsets.all(10.0),
-            child: ListView.separated(
+            child:(StudentModel.length != 0)? ListView.separated(
                 itemBuilder: (ctx, index) {
                   final data = StudentModel[index];
                   return Card(
@@ -76,7 +78,8 @@ class View_studens extends StatelessWidget {
                               // }else{
                               //   print('Student ID Is NUll');
                               // }
-                              deleteStudent(index);
+                            DeleteAlertBox(context, index);
+                            deleteStudent(index);
                               // AlertDialog(
                               //   title: Text(
                               //     'DO YOU WANT TO DELETE?',
@@ -107,7 +110,7 @@ class View_studens extends StatelessWidget {
                 separatorBuilder: (ctx, index) {
                   return const Divider();
                 },
-                itemCount: StudentModel.length),
+                itemCount: StudentModel.length): Center(child: Text("No Students Found",style: TextStyle(color: Colors.white),),),
           );
         },
         valueListenable: studentListNotifier,
@@ -122,5 +125,32 @@ class View_studens extends StatelessWidget {
       child: const Icon(Icons.search),
       ),
     );
+  }
+   DeleteAlertBox(BuildContext context,index){
+    //cancelBUtton
+    Widget cancelButton= TextButton(
+    child: Text("Cancel"),
+    onPressed:  () {
+      Navigator.pop(context);
+    },
+    );
+
+    //ContinueButton
+    Widget continueButton = TextButton(
+    child: Text("Continue"),
+    onPressed:  () {
+       deleteStudent(index);
+    },
+    );
+
+
+    AlertDialog alert = AlertDialog(
+    title: Text("AlertDialog"),
+    content: Text("Would you like to continue learning how to use Flutter alerts?"),
+    actions: [
+      cancelButton,
+      continueButton,
+    ],
+  );
   }
 }
